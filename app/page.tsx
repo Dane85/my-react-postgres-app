@@ -50,13 +50,6 @@ export default async function Home() {
           />
         </div>
 
-        <h1 className="text-5xl md:text-7xl mb-4 text-[var(--text-bone)]">
-          Rudiarius
-        </h1>
-        <p className="text-xl md:text-2xl mb-8 tracking-widest text-[var(--gladiator-gold)]">
-          Jiu Jitsu
-        </p>
-
         {/* DYNAMIC EVENT CARD */}
         {nextEvent ? (
           <div className="bg-[var(--bg-card)] border border-[var(--rudis-wood)] p-6 rounded-lg max-w-lg w-full mb-10 shadow-lg">
