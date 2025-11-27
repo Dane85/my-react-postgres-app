@@ -1,65 +1,96 @@
 import Image from "next/image";
+import FoundingHouses from "@/components/FoundingHouses"; 
+import TheCode from "@/components/TheCode"; // <--- THIS LINE IS LIKELY MISSING
+import { query } from "@/lib/db";
 
-export default function Home() {
+// 1. Function to get data from DB
+async function getNextEvent() {
+  const sql = `
+    SELECT e.event_date, e.location_address, e.description, s.name as host_name 
+    FROM events e
+    JOIN schools s ON e.host_school_id = s.id
+    WHERE e.event_date >= NOW()
+    ORDER BY e.event_date ASC
+    LIMIT 1;
+  `;
+  
+  try {
+    const result = await query(sql);
+    return result.rows[0]; 
+  } catch (error) {
+    console.error("Database Error:", error);
+    return null;
+  }
+}
+
+// 2. Main Component
+export default async function Home() {
+  const nextEvent = await getNextEvent();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <main className="min-h-screen flex flex-col items-center bg-[var(--bg-void)]">
+      
+      {/* HERO SECTION */}
+      <section className="w-full min-h-[90vh] flex flex-col justify-center items-center text-center px-4 pt-10">
+        
+        {/* SWORD LOGO */}
+        <div className="mb-8 relative">
+            {/* Make sure this file exists in public/logos/rswordlogo.jpg */}
+            <Image 
+              src="/logos/rSwordlogo.png" 
+              alt="Rudiarius Sword" 
+              width={500}
+              height={100} 
+              className="w-64 md:w-96 h-auto"
+              priority 
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
         </div>
-      </main>
-    </div>
+
+        
+        {/* DYNAMIC EVENT CARD */}
+        {nextEvent ? (
+          <div className="bg-[var(--bg-card)] border border-[var(--rudis-wood)] p-6 rounded-lg max-w-lg w-full mb-10 shadow-lg">
+            <h3 className="text-[var(--legion-red)] text-lg mb-2">Next Gathering</h3>
+            <p className="text-2xl text-[var(--text-bone)] font-bold mb-1">
+              {new Date(nextEvent.event_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            </p>
+            <p className="text-xl mb-4 text-[var(--text-bone)]">
+              @ {new Date(nextEvent.event_date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+            </p>
+            
+            <div className="border-t border-[#333] pt-4 mt-2">
+              <p className="text-[var(--gladiator-gold)] text-sm uppercase tracking-wide">Hosted By</p>
+              <p className="text-lg mb-2">{nextEvent.host_name}</p>
+              <p className="text-[var(--text-muted)] text-sm">{nextEvent.location_address}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="mb-10 p-6 border border-dashed border-gray-600 rounded">
+            <p className="text-[var(--text-muted)]">No upcoming events scheduled.</p>
+          </div>
+        )}
+
+        <p className="max-w-2xl text-[var(--text-muted)] text-lg mb-10 leading-relaxed">
+          The monthly gathering for the <strong>Rudiarii</strong>—men 40+ who have earned their freedom, 
+          but choose to stay in the fight. No egos. No 20-year-olds. Just survival.
+        </p>
+
+        <div className="flex gap-4">
+             <button className="px-8 py-3 bg-[var(--rudis-wood)] text-white font-bold rounded hover:brightness-110 transition">
+              Join the Ranks
+            </button>
+            <a href="#the-code" className="px-8 py-3 border border-[var(--legion-red)] text-[var(--legion-red)] font-bold rounded hover:bg-[var(--legion-red)] hover:text-white transition">
+              Read The Code
+            </a>
+        </div>
+      </section>
+
+      {/* FOUNDING HOUSES SECTION */}
+      <FoundingHouses />
+      {/* THE CODE SECTION */}
+      <TheCode />
+
+
+    </main>
   );
 }
