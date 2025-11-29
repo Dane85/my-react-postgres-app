@@ -2,6 +2,8 @@ import Image from "next/image";
 import FoundingHouses from "@/components/FoundingHouses";
 import TheCode from "@/components/TheCode";
 import { query } from "@/lib/db";
+import React from "react";
+import Hero from "@/components/Hero";
 
 // 1. Function to get data from DB
 async function getNextEvent() {
@@ -36,6 +38,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center bg-[var(--bg-void)]">
+      <Hero />
       {/* HERO SECTION */}
       <section className="w-full min-h-[90vh] flex flex-col justify-center items-center text-center px-4 pt-10">
         {/* SWORD LOGO */}
