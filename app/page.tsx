@@ -2,8 +2,8 @@ import Image from "next/image";
 import FoundingHouses from "@/components/FoundingHouses";
 import TheCode from "@/components/TheCode";
 import { query } from "@/lib/db";
-import React from "react";
 import Hero from "@/components/Hero";
+import Rudiarius from "@/components/Rudiarius";
 
 // 1. Function to get data from DB
 async function getNextEvent() {
@@ -40,18 +40,8 @@ export default async function Home() {
     <main className="min-h-screen flex flex-col items-center bg-[var(--bg-void)]">
       <Hero />
       {/* HERO SECTION */}
-      <section className="w-full min-h-[90vh] flex flex-col justify-center items-center text-center px-4 pt-10">
-        {/* SWORD LOGO */}
-        <div className="mb-8 relative">
-          <Image
-            src="/logos/rswordlogo.png"
-            alt="Rudiarius Sword"
-            width={500}
-            height={100}
-            className="w-64 md:w-96 h-auto"
-            priority
-          />
-        </div>
+      <section className="w-full flex flex-col justify-center items-center text-center px-4 pt-10">
+        <Rudiarius />
 
         {/* DYNAMIC EVENT CARD */}
         {nextEvent ? (

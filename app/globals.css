@@ -4,18 +4,18 @@
 
 :root {
   /* THE RUDIARIUS PALETTE */
-  --bg-void: #0a0a0a;         /* Main Background */
-  --bg-card: #1F1F1F;         /* Component Background */
-  
-  --text-bone: #F2E8D5;       /* Primary Text */
-  --text-muted: #dcd3c0;      /* Secondary Text */
-  
-  --rudis-wood: #8F5B34;      /* Buttons/Borders */
-  --legion-red: #9A2A2A;      /* CTA/Alerts */
-  --gladiator-gold: #C5A065;  /* Accents */
+  --bg-void: #0a0a0a; /* Main Background */
+  --bg-card: #1f1f1f; /* Component Background */
 
-  --font-serif: 'Cinzel', serif;
-  --font-sans: 'Lato', sans-serif;
+  --text-bone: #f2e8d5; /* Primary Text */
+  --text-muted: #dcd3c0; /* Secondary Text */
+
+  --rudis-wood: #8f5b34; /* Buttons/Borders */
+  --legion-red: #9a2a2a; /* CTA/Alerts */
+  --gladiator-gold: #c5a065; /* Accents */
+
+  --font-serif: "Cinzel", serif;
+  --font-sans: "Lato", sans-serif;
 }
 
 body {
@@ -24,7 +24,10 @@ body {
   font-family: var(--font-sans);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-serif);
   font-weight: 700;
   text-transform: uppercase;
